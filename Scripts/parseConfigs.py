@@ -157,7 +157,7 @@ def parse_configs (currpath):
 ### Beginning of main program
 ###
 ##############################
-if len(sys.argv) > 2:
+if len(sys.argv) != 2:
   Usage()
   sys.exit(1)
 else:
