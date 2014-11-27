@@ -192,11 +192,11 @@ Note that it's better to look at the use\_case first to decide what compset you
 are running; in most cases, if the use\_case from a test matches a CESM compset,
 the following options will all match as well. But this will have to be
 double-checked for each test. If there is no use\_case, it may also still be the
-case that there is a compset corresponding to these options, but this is
+case that there is a compset corresponding to these options, but this is less
 certain.
 
 For any desired combination in the tests that does not correspond to a compset,
-we will have to pick a "close" compset and use testmods to correct the
+we will have to pick a "close" compset and use testmods to make up the
 difference.
 
 - `-phys`: Broad collections of physics packages (e.g. `cam5`, `ideal`, etc.).
@@ -229,18 +229,18 @@ difference.
   physics runs prognostically. PORT is the first and currently only offline tool
   provided using this option, and it corresponds to the `P` compsets in CESM.
 
-- `-ocn`: Most standalone CAM tests use the CESM data ocean (docn), but there
+- `-ocn`: Most standalone CAM tests use the CESM data ocean (`docn`), but there
   are a few tests that use aquaplanet, and these need to be translated to an
   AQUAP compset.
 
-  CAM also has a legacy data ocean model (dom). We only do minimal testing of
+  CAM also has a legacy data ocean model (`dom`). We only do minimal testing of
   this, and it's not clear whether/why we need to keep it, since at face value
-  docn seems to have superceded it.
+  `docn` seems to have superceded it.
 
 - `-clubb_sgs`: Turns on CLUBB. A compset already exists for this case.
 
 - `-carma`: Turns on a CARMA model. The `bc_strat` and `sulfate` models have
-  associated compsets. The other cases would need to be added using testmods.
+  associated compsets. The other models would need to be added using testmods.
 
 ## Options corresponding to testmods
 
@@ -264,22 +264,23 @@ difference.
 - `-cosp`: COSP diagnostic outputs. Can be added to any compset, but none of
   them enable it by default due to the cost.
 
-- `-microphys`: Change microphysics. Usually implied by the `-phys` option, so
-  this is only needed to turn on MG2 until the CAM5.5 or CAM6 compsets are
-  defined. (ACME only has MG1.5, but will very likely get MG2 at some point.)
+- `-microphys`: Change microphysics. Usually a correct value is implied by the
+  `-phys` option, so this is only needed to turn on MG2, until CAM5.5 or CAM6
+  compsets are defined with MG2 as the new default. (ACME only has MG1.5, but
+  will very likely get MG2 at some point.)
 
-- `-rad`: Only needed to test that RRTMG works with CAM4. (CESM doesn't
-  officially support this, but there are some papers based on this combination,
-  and it's easy to maintain.)
+- `-rad`: Used to test that RRTMG works with CAM4. (CESM doesn't officially
+  support this, but there are some WACCM and CARMA papers based on this
+  combination, and it's easy to maintain.)
 
 - `-camiop`: Generates IOP files for later use by SCAM. Needed for translation
   of the TSC tests.
 
 - `-psubcols`: Turns on subcolumns. The infrastructure is complete, but none of
   the schemes that use subcolumns are complete from a scientific perspective, so
-  there is no compset. Nonetheless, we test the infrastructure by checking that
-  subcolumns that are just copies of the original columns get bit-for-bit
-  answers with the non-subcolumnized model.
+  there is no compset. Nonetheless, we test the infrastructure with a "copy"
+  scheme that tests that the infrastructure and data rearrangement itself does
+  not affect answers.
 
 - `-prog_species`/`-usr_mech_infile`: Custom chemistry mechanisms.
   `-prog_species` will create a custom chemistry mechanism based on the chemical
@@ -290,5 +291,5 @@ difference.
   scheme.
 
   While none of the files in `config_files` specify `-usr_mech_infile` directly,
-  there is logic in TCB.sh that passes `config_files/testmech` as the custom
-  file in one test.
+  there is logic in TCB.sh to use `config_files/testmech` as the custom
+  mechanism in one test.
